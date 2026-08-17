@@ -631,12 +631,56 @@
             }
         }
 
-        function nextStep() {
+                function nextStep() {
             if (currentStep < steps.length - 1) {
                 currentStep++;
                 displayCurrentStep();
             }
         }
+
+        function lastStep() {
+            currentStep = steps.length - 1;
+            displayCurrentStep();
+        }
+
+        function toggleAutoPlay() {
+            if (autoPlay) {
+                autoPlay = false;
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = null;
+                document.getElementById('playButton').textContent = '▶ Play';
+                return;
+            }
+
+            if (!steps.length) {
+                return;
+            }
+
+            if (currentStep >= steps.length - 1) {
+                currentStep = 0;
+                displayCurrentStep();
+            }
+
+            autoPlay = true;
+            document.getElementById('playButton').textContent = '⏸ Pause';
+
+            const intervalTime = 1000 / speed;
+
+            autoPlayInterval = setInterval(() => {
+                if (currentStep < steps.length - 1) {
+                    currentStep++;
+                    displayCurrentStep();
+                } else {
+                    autoPlay = false;
+                    clearInterval(autoPlayInterval);
+                    autoPlayInterval = null;
+                    document.getElementById('playButton').textContent = '▶ Play';
+                }
+            }, intervalTime);
+        }
+
+        // Initialize the visualizer when the page loads
+        resetVisualization();
     </script>
 </body>
 </html>
